@@ -2,6 +2,12 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
+def keystorePropertiesFile = rootProject.file('keystore.properties')
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     namespace 'com.dpouya.aitexty'
     compileSdk {
@@ -22,12 +28,35 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            if (keystorePropertiesFile.exists()) {
+                storeFile rootProject.file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (keystorePropertiesFile.exists()) {
+                signingConfig signingConfigs.release
+            } else {
+                signingConfig signingConfigs.debug
+            }
         }
     }
+
+    splits {
+        abi {
+            enable false
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -36,6 +65,39 @@ android {
         jniLibs {
             useLegacyPackaging true
         }
+    }
+}
+
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        def version = android.defaultConfig.versionName
+        variant.outputs.forEach { output ->
+            output.outputFileName.set("AITexty-${version}-${variant.name}-universal.apk")
+        }
+    }
+}
+
+tasks.register('fatApk') {
+    group = 'distribution'
+    description = 'Build a signed universal APK and copy it to dist/'
+    dependsOn 'assembleRelease'
+    doLast {
+        def releaseDir = layout.buildDirectory.dir('outputs/apk/release').get().asFile
+        def apk = releaseDir.listFiles()?.find { it.name.endsWith('.apk') && !it.name.contains('unsigned') }
+        if (apk == null) {
+            apk = releaseDir.listFiles()?.find { it.name.endsWith('.apk') }
+        }
+        if (apk == null) {
+            throw new GradleException('Release APK not found in ' + releaseDir)
+        }
+        def distDir = rootProject.file('dist')
+        distDir.mkdirs()
+        def dest = new File(distDir, apk.name)
+        project.copy {
+            from apk
+            into distDir
+        }
+        logger.lifecycle('Universal APK: ' + dest.absolutePath + ' (' + (dest.length() / (1024 * 1024)).intValue() + ' MB)')
     }
 }
 

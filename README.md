@@ -1,5 +1,7 @@
 # AITexty
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 AITexty is an Android SMS client with on-device AI, privacy tools, and full Persian (Farsi) support — including offline text-to-speech for accessibility.
 
 **Package:** `com.dpouya.aitexty`  
@@ -55,6 +57,27 @@ AITexty is an Android SMS client with on-device AI, privacy tools, and full Pers
 
 ---
 
+## Download
+
+Pre-built **universal APK** (arm64-v8a + armeabi-v7a in one file):
+
+| Source | How |
+|--------|-----|
+| **GitHub Releases** | Open [Releases](../../releases) and download `AITexty-*-release-universal.apk` |
+| **CI artifact** | Actions → **Build universal APK** → latest run → **aitexty-universal-apk** |
+| **Build locally** | `./gradlew :app:fatApk` → output in [`dist/`](dist/) |
+
+Install on device: enable **Install unknown apps** for your file manager or browser, then open the APK.
+
+To publish a release from CI, push a version tag:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+---
+
 ## Build
 
 1. Clone the repository.
@@ -68,11 +91,17 @@ AITexty is an Android SMS client with on-device AI, privacy tools, and full Pers
 
 Install the APK from `app/build/outputs/apk/debug/`.
 
-For a release build:
+### Universal (fat) release APK
+
+One APK with all supported CPU architectures (no per-ABI splits):
 
 ```bash
-./gradlew :app:assembleRelease
+./gradlew :app:fatApk
 ```
+
+Output: `dist/AITexty-<version>-release-universal.apk`
+
+Without `keystore.properties`, the release APK is signed with the **debug keystore** so you can sideload it. For Play Store builds, copy `keystore.properties.example` to `keystore.properties` and add your release keystore.
 
 ---
 
@@ -138,7 +167,11 @@ Persian TTS voice archives are downloaded from the [sherpa-onnx TTS models relea
 
 ## License
 
-License not specified in this repository. Add a `LICENSE` file if you intend to open-source or distribute the app.
+This project is licensed under the **MIT License** — see [LICENSE](LICENSE).
+
+Copyright (c) 2026 Pouya D
+
+Third-party libraries and downloaded models (e.g. Sherpa ONNX, Piper voices, GGUF files) remain under their own licenses.
 
 ---
 

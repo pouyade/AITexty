@@ -13,7 +13,9 @@ captures/
 .externalNativeBuild/
 .cxx/
 *.apk
+!dist/*.apk
 output.json
+keystore.properties
 
 # IntelliJ
 *.iml
