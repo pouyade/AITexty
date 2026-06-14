@@ -2,6 +2,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+[English](#aitexty) · [فارسی](#فارسی)
+
 AITexty is an Android SMS client with on-device AI, privacy tools, and full Persian (Farsi) support — including offline text-to-speech for accessibility.
 
 **Package:** `com.dpouya.aitexty`  
@@ -69,7 +71,13 @@ Pre-built **universal APK** (arm64-v8a + armeabi-v7a in one file):
 
 Install on device: enable **Install unknown apps** for your file manager or browser, then open the APK.
 
-To publish a release from CI, push a version tag:
+### Publish a GitHub Release (no git tag required)
+
+1. Go to **Actions** → **Build universal APK** → **Run workflow**
+2. Leave defaults or set **Release tag** (e.g. `v1.0.0`) and ensure **Publish GitHub Release** is checked
+3. Run — the APK appears under [Releases](../../releases) as `v1.0.0-build.<run>` (build number avoids duplicate-tag errors on re-runs)
+
+You can also publish by pushing a git tag (creates release `v1.0.0` exactly):
 
 ```bash
 git tag v1.0.0
@@ -162,6 +170,96 @@ Assets and strings live under `app/src/main/assets/langs/`.
 ## Third-party models
 
 Persian TTS voice archives are downloaded from the [sherpa-onnx TTS models release](https://github.com/k2-fsa/sherpa-onnx/releases/tag/tts-models). AI models are user-supplied GGUF files configured in the app.
+
+---
+
+## فارسی
+
+**AITexty** یک اپلیکیشن پیامک اندروید با هوش مصنوعی روی دستگاه، ابزارهای حریم خصوصی و پشتیبانی کامل از زبان فارسی — از جمله تبدیل متن به گفتار آفلاین برای دسترس‌پذیری.
+
+**شناسه بسته:** `com.dpouya.aitexty`  
+**حداقل اندروید:** ۷ (API 24) · **هدف:** ۳۶
+
+### امکانات
+
+**پیام‌رسانی**
+- اپ پیش‌فرض SMS/MMS با فهرست گفتگو، جستجو و ارسال پیام
+- انتخاب مخاطب از دفترچه تلفن یا شماره دستی
+- لینک‌های قابل کلیک در حباب پیام
+- تم اختصاصی برای هر گفتگو
+- فیلتر و تشخیص اسپم
+
+**هوش مصنوعی روی دستگاه**
+- اجرای مدل زبانی محلی با **llama.cpp**
+- دانلود و مدیریت مدل‌های GGUF از تنظیمات هوش مصنوعی
+- **پیشنهاد پاسخ** بر اساس تاریخچه گفتگو
+- **پاسخ خودکار** با شخصیت قابل تنظیم برای هر مخاطب
+
+**حریم خصوصی و امنیت**
+- **لیست مسدودسازی** (بی‌صدا، رد تماس، حذف)
+- **گفتگوهای مخفی** با قفل PIN یا ژست مخفی
+- **اعلان فریبنده** برای گفتگوهای مخفی
+- **رمزنگاری محلی** پیام‌ها روی دستگاه
+- **رمزنگاری سرتاسری** بین کاربران AITexty با تبادل کلید QR
+
+**دسترس‌پذیری و فارسی**
+- خواندن پیام‌ها با صدای بلند (TTS)
+- تبدیل گفتار به متن هنگام نوشتن پیام
+- فرمان صوتی (مثلاً «ارسال پیام»، «خواندن پیام»)
+- تنظیم سرعت گفتار و انتخاب صدا
+- **TTS فارسی آفلاین** (Sherpa ONNX / Piper):
+  - **Gyro** — همراه اپ (بدون دانلود)
+  - **امیر، گنجی، گنجی ادبی، رضا ابراهیم** — دانلود در صورت نیاز (~۶۳ مگابایت هر کدام)
+- برای متن غیرفارسی در صورت امکان از Google TTS یا Samsung استفاده می‌شود
+
+**رابط کاربری**
+- زبان‌های انگلیسی و فارسی
+- چیدمان راست‌به‌چپ (RTL)
+
+### نیازمندی‌ها
+
+- اندروید ۷.۰ یا جدیدتر
+- پردازنده **arm64-v8a** یا **armeabi-v7a**
+- تنظیم AITexty به‌عنوان **اپ پیش‌فرض پیامک**
+- مجوزها: پیامک، مخاطبین، اعلان، اینترنت (دانلود مدل/صدا)، دوربین (QR)، میکروفون
+
+### دانلود
+
+فایل **APK یکپارچه** (هر دو معماری ARM در یک فایل):
+
+| منبع | روش |
+|------|-----|
+| **GitHub Releases** | از [Releases](../../releases) فایل `AITexty-*-release-universal.apk` را بگیرید |
+| **آرتیفکت CI** | Actions → **Build universal APK** → آخرین اجرا → **aitexty-universal-apk** |
+| **ساخت محلی** | `./gradlew :app:fatApk` → خروجی در [`dist/`](dist/) |
+
+روی گوشی: **نصب از منابع ناشناس** را برای مرورگر یا مدیریت فایل فعال کنید، سپس APK را باز کنید.
+
+**انتشار Release بدون تگ git:** در GitHub بروید به Actions → Build universal APK → Run workflow و گزینه Publish GitHub Release را روشن بگذارید.
+
+### اولین اجرا
+
+1. راهنمای اولیه را تکمیل کنید و مجوزهای پیامک، مخاطبین و اعلان را بدهید.
+2. AITexty را **اپ پیش‌فرض پیامک** کنید.
+3. اختیاری: **تنظیمات → هوش مصنوعی** — دانلود مدل GGUF برای پیشنهاد و پاسخ خودکار.
+4. اختیاری: **تنظیمات → دسترس‌پذیری** — TTS، سرعت گفتار و صدای فارسی. صداهای دانلودی بار اول به اینترنت نیاز دارند.
+
+اگر صدای فارسی بعد از دانلود ناقص خراب شد، یک‌بار حافظه اپ را پاک کنید و دوباره صدا را انتخاب کنید — قبل از بارگذاری، یکپارچگی فایل (اندازه + SHA-256) بررسی می‌شود.
+
+### ساخت از سورس
+
+```bash
+./gradlew :app:assembleDebug    # نسخه دیباگ
+./gradlew :app:fatApk          # APK یکپارچه انتشار → dist/
+```
+
+JitPack برای وابستگی PersianTTS لازم است. بدون `keystore.properties`، APK انتشار با کلید دیباگ امضا می‌شود (مناسب نصب مستقیم).
+
+### مجوز
+
+این پروژه تحت **مجوز MIT** منتشر شده — جزئیات در [LICENSE](LICENSE).
+
+کتابخانه‌ها و مدل‌های شخص ثالث (Sherpa ONNX، صداهای Piper، فایل‌های GGUF) مجوز جداگانه دارند.
 
 ---
 

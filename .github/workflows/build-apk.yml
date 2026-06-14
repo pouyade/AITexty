@@ -5,6 +5,19 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag (e.g. v1.0.0). Re-runs append -build.<run> to avoid duplicate-tag errors.'
+        required: true
+        default: 'v1.0.0'
+      create_release:
+        description: 'Publish GitHub Release with APK'
+        type: boolean
+        default: true
+      draft:
+        description: 'Create release as draft'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -35,9 +48,29 @@ jobs:
           path: dist/*.apk
           if-no-files-found: error
 
+      - name: Resolve release tag
+        id: release
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            TAG="${{ inputs.release_tag }}-build.${{ github.run_number }}"
+            echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+            echo "publish=${{ inputs.create_release }}" >> "$GITHUB_OUTPUT"
+            echo "draft=${{ inputs.draft }}" >> "$GITHUB_OUTPUT"
+            echo "Manual run → tag ${TAG}, publish=${{ inputs.create_release }}"
+          else
+            echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+            echo "draft=false" >> "$GITHUB_OUTPUT"
+            echo "Tag push → release ${GITHUB_REF_NAME}"
+          fi
+
       - name: Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: steps.release.outputs.publish == 'true'
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.release.outputs.tag }}
+          name: AITexty ${{ steps.release.outputs.tag }}
           files: dist/*.apk
           generate_release_notes: true
+          make_latest: ${{ steps.release.outputs.draft != 'true' }}
+          draft: ${{ steps.release.outputs.draft == 'true' }}
