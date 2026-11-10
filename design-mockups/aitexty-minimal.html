@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AITexty — Minimal Screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+
+  :root {
+    --font-display: "Syne", "Arial Black", sans-serif;
+    --font-ui: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "IBM Plex Mono", Menlo, Consolas, monospace;
+    --radius: 0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a1a;
+    color: #eee;
+    font-family: var(--font-ui);
+    padding: 32px 24px 64px;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 28px;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+  .meta {
+    color: #999;
+    font-size: 13px;
+    margin-bottom: 28px;
+    max-width: 640px;
+    line-height: 1.45;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 28px;
+  }
+  .shot {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .shot label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .phone {
+    width: 300px;
+    height: 650px;
+    border: 2px solid #444;
+    background: #000;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  /* Theme tokens */
+  .light {
+    --bg: #F3F4F1;
+    --surface: #FFFFFF;
+    --text: #101210;
+    --muted: #6B736C;
+    --line: #D5D8D2;
+    --accent: #0D9488;
+    --accent-text: #FFFFFF;
+    --bubble-in: #FFFFFF;
+    --bubble-out: #0D9488;
+    --bubble-out-text: #FFFFFF;
+    --compose: #FFFFFF;
+    --fab: #0D9488;
+  }
+  .dark {
+    --bg: #0B0D0C;
+    --surface: #141816;
+    --text: #EDEFED;
+    --muted: #8A928B;
+    --line: #2A2F2C;
+    --accent: #2DD4BF;
+    --accent-text: #041210;
+    --bubble-in: #1A1F1C;
+    --bubble-out: #0F766E;
+    --bubble-out-text: #F4FFFC;
+    --compose: #141816;
+    --fab: #2DD4BF;
+  }
+
+  .screen {
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-ui);
+  }
+
+  .status {
+    height: 28px;
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text);
+    flex-shrink: 0;
+  }
+  .status .dots { letter-spacing: 2px; }
+
+  .topbar {
+    height: 52px;
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+    background: var(--bg);
+  }
+  .topbar .title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -0.03em;
+    flex: 1;
+  }
+  .topbar .sub {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+    flex: 1;
+  }
+  .icon-btn {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--text);
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .back {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    font-size: 14px;
+  }
+
+  .mono { font-family: var(--font-mono); }
+  .muted { color: var(--muted); }
+
+  /* Conversations */
+  .list { flex: 1; overflow: hidden; }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .avatar {
+    width: 40px;
+    height: 40px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .avatar.accent {
+    background: var(--accent);
+    color: var(--accent-text);
+    border-color: var(--accent);
+  }
+  .row-body { flex: 1; min-width: 0; }
+  .row-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: -0.02em;
+  }
+  .name.unread { font-weight: 800; }
+  .time {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .preview {
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .badge {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    background: var(--accent);
+    color: var(--accent-text);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    display: grid;
+    place-items: center;
+  }
+
+  .fab {
+    position: absolute;
+    right: 16px;
+    bottom: 20px;
+    width: 48px;
+    height: 48px;
+    background: var(--fab);
+    color: var(--accent-text);
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    font-weight: 400;
+    border: none;
+  }
+
+  /* Chat */
+  .messages {
+    flex: 1;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: hidden;
+  }
+  .bubble-wrap {
+    display: flex;
+    flex-direction: column;
+    max-width: 78%;
+    gap: 3px;
+  }
+  .bubble-wrap.in { align-self: flex-start; align-items: flex-start; }
+  .bubble-wrap.out { align-self: flex-end; align-items: flex-end; }
+  .bubble {
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.4;
+    border: 1px solid var(--line);
+  }
+  .bubble.in { background: var(--bubble-in); color: var(--text); }
+  .bubble.out {
+    background: var(--bubble-out);
+    color: var(--bubble-out-text);
+    border-color: var(--bubble-out);
+  }
+  .stamp {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--muted);
+  }
+
+  .compose {
+    border-top: 1px solid var(--line);
+    padding: 10px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: var(--bg);
+    flex-shrink: 0;
+  }
+  .compose input {
+    flex: 1;
+    height: 40px;
+    border: 1px solid var(--line);
+    background: var(--compose);
+    color: var(--text);
+    padding: 0 12px;
+    font-family: var(--font-ui);
+    font-size: 13px;
+    outline: none;
+    border-radius: 0;
+  }
+  .compose input::placeholder { color: var(--muted); }
+  .sq {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--text);
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .sq.send {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-text);
+  }
+
+  /* Onboarding */
+  .onboard {
+    flex: 1;
+    padding: 36px 22px 28px;
+    display: flex;
+    flex-direction: column;
+  }
+  .brand-mark {
+    width: 64px;
+    height: 64px;
+    background: var(--accent);
+    color: var(--accent-text);
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 22px;
+    margin-bottom: 28px;
+  }
+  .hero {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 34px;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 12px;
+  }
+  .lede {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.45;
+    margin-bottom: auto;
+    max-width: 240px;
+  }
+  .btn {
+    height: 48px;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    margin-top: 10px;
+    border: 1px solid transparent;
+  }
+  .btn.filled {
+    background: var(--accent);
+    color: var(--accent-text);
+    border-color: var(--accent);
+  }
+  .btn.outline {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--text);
+  }
+
+  /* Settings */
+  .section-label {
+    padding: 18px 14px 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .set-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+  }
+  .set-row .left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .set-row .hint {
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .toggle {
+    width: 40px;
+    height: 22px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    position: relative;
+  }
+  .toggle.on { background: var(--accent); border-color: var(--accent); }
+  .toggle::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: var(--text);
+  }
+  .toggle.on::after {
+    left: auto;
+    right: 2px;
+    background: var(--accent-text);
+  }
+  .chev { color: var(--muted); font-size: 12px; }
+
+  /* Empty */
+  .empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 24px;
+    text-align: center;
+  }
+  .empty-icon {
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--line);
+    display: grid;
+    place-items: center;
+    margin-bottom: 6px;
+    font-size: 18px;
+  }
+  .empty h2 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+  }
+  .empty p { font-size: 13px; color: var(--muted); }
+
+  .search-bar {
+    margin: 10px 14px;
+    height: 40px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .search-bar .caret {
+    width: 1px;
+    height: 14px;
+    background: var(--accent);
+  }
+
+  .field {
+    margin: 12px 14px;
+    border-bottom: 1px solid var(--text);
+    padding-bottom: 8px;
+  }
+  .field .lab {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .field .val {
+    font-size: 15px;
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+  .selected { box-shadow: inset 3px 0 0 var(--accent); }
+</style>
+</head>
+<body>
+  <h1>AITexty</h1>
+  <p class="meta">Minimal SMS · sharp edges · Syne + IBM Plex · teal accent · light / dark</p>
+
+  <div class="grid">
+
+    <!-- 01 Onboarding Light -->
+    <div class="shot" id="s01">
+      <label>01 · Onboarding · Light</label>
+      <div class="phone">
+        <div class="screen light">
+          <div class="status"><span>9:41</span><span class="dots">•••</span></div>
+          <div class="onboard">
+            <div class="brand-mark">AI</div>
+            <div class="hero">AITexty</div>
+            <p class="lede">Smart SMS with on-device AI. Private by default.</p>
+            <div class="btn filled">Grant permissions</div>
+            <div class="btn outline">Set as default SMS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 Conversations Light -->
+    <div class="shot" id="s02">
+      <label>02 · Conversations · Light</label>
+      <div class="phone">
+        <div class="screen light">
+          <div class="status"><span>9:41</span><span class="dots">•••</span></div>
+          <div class="topbar">
+            <div class="title">AITexty</div>
+            <div class="icon-btn">⌕</div>
+            <div class="icon-btn">☰</div>
+          </div>
+          <div class="list">
+            <div class="row">
+              <div class="avatar accent">MC</div>
+              <div class="row-body">
+                <div class="row-top"><div class="name unread">Maya Chen</div><div class="time">14:02</div></div>
+                <div class="preview">Can we move the call to 5?</div>
+              </div>
+              <div class="badge">2</div>
+            </div>
+            <div class="row">
+              <div class="avatar">AR</div>
+              <div class="row-body">
+                <div class="row-top"><div class="name">Alex Rivera</div><div class="time">12:18</div></div>
+                <div class="preview">Sent the docs. Check when free.</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="avatar">SK</div>
+              <div class="row-body">
+                <div class="row-top"><div class="name">Sara K.</div><div class="time">Yesterday</div></div>
+                <div class="preview">Thanks — that worked perfectly.</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="avatar">+1</div>
+              <div class="row-body">
+                <div class="row-top"><div class="name">+1 415 555 0198</div><div class="time">Mon</div></div>
+                <div class="preview">Your verification code is 482911</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="avatar">JD</div>
+              <div class="row-body">
+                <div class="row-top"><div class="name">Jordan D</div><div class="time">Sun</div></div>
+                <div class="preview">See you at the studio.</div>
+              </div>
+            </div>
+          </div>
+          <div class="fab">+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 Conversations Dark -->
+    <div class="shot" id="s03">
+      <label>03 · Conversations · Dark</label>
+      <div class="phone">
+        <div class="screen dark">
+          <div class="status"><span>9:41</span><span class="dots">•••</span></div>
+          <div class="topbar">
+            <div class="title">AITexty</div>
+            <div class="icon-btn">⌕</div>
+            <div class="icon-btn">☰</div>
+          </div>
+          <div class="list">
+            <div class="row">
+              <div class="avatar accent">MC</div>
+              <div class="row-body">
+                <div class="row-top"><div class="name unread">Maya Chen</div><div class="time">14:02</div></div>
+                <div class="preview">Can we move the call to 5?</div>
+              </div>
+              <div class="badge">2</div>
+            </div>
+            <div class="row">
+              <div class="avatar">AR</div>
+              <div class="row-body">
+                <div class="row-top"><div class="name">Alex Rivera</div><div class="time">12:18</div></div>
+                <div class="preview">Sent the docs. Check when free.</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="avatar">SK</div>
+              <div class="row-body">
+                <div class="row-top"><div class="name">Sara K.</div><div class="time">Yesterday</div></div>
+                <div class="preview">Thanks — that worked perfectly.</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="avatar">+1</div>
+              <div class="row-body">
+                <div class="row-top"><div class="name">+1 415 555 0198</div><div class="time">Mon</div></div>
+                <div class="preview">Your verification code is 482911</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="avatar">JD</div>
+              <div class="row-body">
+                <div class="row-top"><div class="name">Jordan D</div><div class="time">Sun</div></div>
+                <div class="preview">See you at the studio.</div>
+              </div>
+            </div>
+          </div>
+          <div class="fab">+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 Chat Light -->
+    <div class="shot" id="s04">
+      <label>04 · Chat · Light</label>
+      <div class="phone">
+        <div class="screen light">
+          <div class="status"><span>9:41</span><span class="dots">•••</span></div>
+          <div class="topbar">
+            <div class="back">‹</div>
+            <div class="avatar" style="width:28px;height:28px;font-size:10px">MC</div>
+            <div class="sub">Maya Chen</div>
+            <div class="icon-btn">🔒</div>
+          </div>
+          <div class="messages">
+            <div class="bubble-wrap in">
+              <div class="bubble in">Are you free after 4?</div>
+              <div class="stamp">13:48</div>
+            </div>
+            <div class="bubble-wrap out">
+              <div class="bubble out">Yes — studio until 5, then open.</div>
+              <div class="stamp">13:51</div>
+            </div>
+            <div class="bubble-wrap in">
+              <div class="bubble in">Can we move the call to 5?</div>
+              <div class="stamp">14:02</div>
+            </div>
+            <div class="bubble-wrap out">
+              <div class="bubble out">Perfect. I'll ping you then.</div>
+              <div class="stamp">14:03</div>
+            </div>
+          </div>
+          <div class="compose">
+            <input placeholder="Write a message..." readonly />
+            <div class="sq">⌁</div>
+            <div class="sq send">→</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 Chat Dark -->
+    <div class="shot" id="s05">
+      <label>05 · Chat · Dark</label>
+      <div class="phone">
+        <div class="screen dark">
+          <div class="status"><span>9:41</span><span class="dots">•••</span></div>
+          <div class="topbar">
+            <div class="back">‹</div>
+            <div class="avatar" style="width:28px;height:28px;font-size:10px">MC</div>
+            <div class="sub">Maya Chen</div>
+            <div class="icon-btn">🔒</div>
+          </div>
+          <div class="messages">
+            <div class="bubble-wrap in">
+              <div class="bubble in">Are you free after 4?</div>
+              <div class="stamp">13:48</div>
+            </div>
+            <div class="bubble-wrap out">
+              <div class="bubble out">Yes — studio until 5, then open.</div>
+              <div class="stamp">13:51</div>
+            </div>
+            <div class="bubble-wrap in">
+              <div class="bubble in">Can we move the call to 5?</div>
+              <div class="stamp">14:02</div>
+            </div>
+            <div class="bubble-wrap out">
+              <div class="bubble out">Perfect. I'll ping you then.</div>
+              <div class="stamp">14:03</div>
+            </div>
+          </div>
+          <div class="compose">
+            <input placeholder="Write a message..." readonly />
+            <div class="sq">⌁</div>
+            <div class="sq send">→</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 06 New Message -->
+    <div class="shot" id="s06">
+      <label>06 · New message · Light</label>
+      <div class="phone">
+        <div class="screen light">
+          <div class="status"><span>9:41</span><span class="dots">•••</span></div>
+          <div class="topbar">
+            <div class="back">‹</div>
+            <div class="title" style="font-size:18px">New message</div>
+          </div>
+          <div class="field">
+            <div class="lab">To</div>
+            <div class="val muted">Name or number</div>
+          </div>
+          <div class="list">
+            <div class="row selected">
+              <div class="avatar accent">MC</div>
+              <div class="row-body">
+                <div class="name">Maya Chen</div>
+                <div class="preview">+1 628 555 0144</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="avatar">AR</div>
+              <div class="row-body">
+                <div class="name">Alex Rivera</div>
+                <div class="preview">+1 415 555 0102</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="avatar">SK</div>
+              <div class="row-body">
+                <div class="name">Sara K.</div>
+                <div class="preview">+1 510 555 0177</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="avatar">JD</div>
+              <div class="row-body">
+                <div class="name">Jordan D</div>
+                <div class="preview">+1 925 555 0133</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 07 Settings -->
+    <div class="shot" id="s07">
+      <label>07 · Settings · Light</label>
+      <div class="phone">
+        <div class="screen light">
+          <div class="status"><span>9:41</span><span class="dots">•••</span></div>
+          <div class="topbar">
+            <div class="back">‹</div>
+            <div class="title" style="font-size:18px">Settings</div>
+          </div>
+          <div class="section-label">Appearance</div>
+          <div class="set-row">
+            <div class="left"><div>Night mode</div><div class="hint">Dark surfaces, teal accent</div></div>
+            <div class="toggle on"></div>
+          </div>
+          <div class="set-row">
+            <div>Language</div>
+            <span class="muted mono" style="font-size:11px">EN <span class="chev">›</span></span>
+          </div>
+          <div class="section-label">Privacy</div>
+          <div class="set-row"><div>Blocklist</div><span class="chev">›</span></div>
+          <div class="set-row"><div>Hidden chats</div><span class="chev">›</span></div>
+          <div class="section-label">Intelligence</div>
+          <div class="set-row">
+            <div class="left"><div>AI settings</div><div class="hint">On-device models</div></div>
+            <span class="chev">›</span>
+          </div>
+          <div class="set-row"><div>Accessibility</div><span class="chev">›</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 08 Settings Dark -->
+    <div class="shot" id="s08">
+      <label>08 · Settings · Dark</label>
+      <div class="phone">
+        <div class="screen dark">
+          <div class="status"><span>9:41</span><span class="dots">•••</span></div>
+          <div class="topbar">
+            <div class="back">‹</div>
+            <div class="title" style="font-size:18px">Settings</div>
+          </div>
+          <div class="section-label">Appearance</div>
+          <div class="set-row">
+            <div class="left"><div>Night mode</div><div class="hint">Dark surfaces, teal accent</div></div>
+            <div class="toggle on"></div>
+          </div>
+          <div class="set-row">
+            <div>Language</div>
+            <span class="muted mono" style="font-size:11px">EN <span class="chev">›</span></span>
+          </div>
+          <div class="section-label">Privacy</div>
+          <div class="set-row"><div>Blocklist</div><span class="chev">›</span></div>
+          <div class="set-row"><div>Hidden chats</div><span class="chev">›</span></div>
+          <div class="section-label">Intelligence</div>
+          <div class="set-row">
+            <div class="left"><div>AI settings</div><div class="hint">On-device models</div></div>
+            <span class="chev">›</span>
+          </div>
+          <div class="set-row"><div>Accessibility</div><span class="chev">›</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 09 Empty / Search Dark -->
+    <div class="shot" id="s09">
+      <label>09 · Empty search · Dark</label>
+      <div class="phone">
+        <div class="screen dark">
+          <div class="status"><span>9:41</span><span class="dots">•••</span></div>
+          <div class="topbar">
+            <div class="title">AITexty</div>
+            <div class="icon-btn">✕</div>
+          </div>
+          <div class="search-bar">⌕ Search… <span class="caret"></span></div>
+          <div class="empty">
+            <div class="empty-icon">▣</div>
+            <h2>No conversations yet</h2>
+            <p>Tap + to start a new message</p>
+          </div>
+          <div class="fab">+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10 Onboarding Dark -->
+    <div class="shot" id="s10">
+      <label>10 · Onboarding · Dark</label>
+      <div class="phone">
+        <div class="screen dark">
+          <div class="status"><span>9:41</span><span class="dots">•••</span></div>
+          <div class="onboard">
+            <div class="brand-mark">AI</div>
+            <div class="hero">AITexty</div>
+            <p class="lede">Smart SMS with on-device AI. Private by default.</p>
+            <div class="btn filled">Grant permissions</div>
+            <div class="btn outline">Set as default SMS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
