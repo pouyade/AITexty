@@ -33,3 +33,9 @@ google-services.json
 
 # Android Profiling
 *.hprof
+/graphify-out
+
+# macOS / local tooling
+.DS_Store
+design-mockups/node_modules/
+/design-mockups
