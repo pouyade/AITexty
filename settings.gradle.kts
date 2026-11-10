@@ -11,17 +11,18 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 plugins {
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
     }
 }
 
-rootProject.name = "AITexty"
-include ':app'
+rootProject.name = "Messages"
+include(":app")
